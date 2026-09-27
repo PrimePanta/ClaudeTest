@@ -229,6 +229,56 @@ function IM.PivotTo(t, target)
 	if t.ClassName == "Model" then t.WorldPivot = target else t.CFrame = target end
 end
 function IM.GetPivot(t) return t.WorldPivot or t.CFrame end
+function IM.GetBoundingBox(t) -- achsparallel (Roblox nimmt die Pivot-Ausrichtung; fuer Proben reicht das)
+	local lo, hi = v(math.huge, math.huge, math.huge), v(-math.huge, -math.huge, -math.huge)
+	for _, d in IM.GetDescendants(t) do
+		if d:IsA("BasePart") then
+			local c, sz = d.CFrame, d.Size
+			local e = v(
+				math.abs(c.R.X) * sz.X / 2 + math.abs(c.U.X) * sz.Y / 2 + math.abs(c.B.X) * sz.Z / 2,
+				math.abs(c.R.Y) * sz.X / 2 + math.abs(c.U.Y) * sz.Y / 2 + math.abs(c.B.Y) * sz.Z / 2,
+				math.abs(c.R.Z) * sz.X / 2 + math.abs(c.U.Z) * sz.Y / 2 + math.abs(c.B.Z) * sz.Z / 2)
+			local a, b = c.Position - e, c.Position + e
+			lo = v(math.min(lo.X, a.X), math.min(lo.Y, a.Y), math.min(lo.Z, a.Z))
+			hi = v(math.max(hi.X, b.X), math.max(hi.Y, b.Y), math.max(hi.Z, b.Z))
+		end
+	end
+	return CFrame.new((lo + hi) / 2), hi - lo
+end
+function IM.GetScale(t) return rawget(t, "_scale") or 1 end
+function IM.ScaleTo(t, s) -- wie Roblox: um die Pivot skalieren, relativ zur aktuellen Groesse
+	local f = s / IM.GetScale(t)
+	local piv = IM.GetPivot(t).Position
+	for _, d in IM.GetDescendants(t) do
+		if d:IsA("BasePart") then
+			local c = d.CFrame
+			d.CFrame = cf(piv + (c.Position - piv) * f, c.R, c.U, c.B)
+			d.Size = d.Size * f
+		end
+	end
+	rawset(t, "_scale", s)
+end
+function IM.Clone(t)
+	local c = Instance.new(t.ClassName)
+	for k, val in rawget(t, "_p") do
+		if k ~= "Parent" and k ~= "PrimaryPart" then c[k] = val end
+	end
+	for k, val in rawget(t, "_a") do c:SetAttribute(k, val) end
+	local map = { [t] = c }
+	for _, ch in rawget(t, "_c") do
+		local cc = IM.Clone(ch)
+		map[ch] = cc
+		cc.Parent = c
+	end
+	if t.PrimaryPart then -- PrimaryPart auf das geklonte Teil umbiegen
+		for _, d in IM.GetDescendants(c) do
+			if d.Name == t.PrimaryPart.Name and d:IsA("BasePart") then c.PrimaryPart = d break end
+		end
+	end
+	return c
+end
+function IM.Emit(t, n) rawset(t, "_emitted", (rawget(t, "_emitted") or 0) + (n or 1)) end
+function IM.Play(t) rawset(t, "_played", (rawget(t, "_played") or 0) + 1) end
 
 local ALL = {}
 Instance = {
