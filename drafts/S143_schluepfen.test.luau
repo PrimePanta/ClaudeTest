@@ -69,13 +69,13 @@ end
 local base = CFrame.new(10, 5, -4) * CFrame.Angles(0, math.rad(30), 0)
 for _, case in {
 	{ rarity = "Gewoehnlich", order = 1, skin = "Normal" },
-	{ rarity = "Mythisch", order = 6, skin = "Gold" },
+	{ rarity = "Mythisch", order = 6, skin = "Gold", isNew = true },
 } do
 	local egg, rot = makeEggModel(), makeBrainrot()
 	local counts, order = {}, {}
 	local h = Hatch.new(egg, rot, {
 		name = "Test", rarity = case.rarity, rarityOrder = case.order, rarityColor = Color3.fromRGB(255, 60, 110),
-		skin = case.skin, skinName = "Gold", skinColor = Color3.fromRGB(255, 200, 50), skinChance = "1 zu 23",
+		skin = case.skin, isNew = case.isNew, skinName = "Gold", skinColor = Color3.fromRGB(255, 200, 50), skinChance = "1 zu 23",
 	}, {
 		parent = D, cframe = base,
 		sounds = { crack = "rbxassetid://1", pop = "rbxassetid://2" },
@@ -111,7 +111,7 @@ for _, case in {
 	for _, e in h.eggParts do check(e.part.Transparency == 1, tag .. "Ei noch sichtbar") end
 	for _, sh in h.shards do check(sh.part.Transparency == 1, tag .. "Scherbe noch sichtbar") end
 	for _, l in h.labels do check(l.TextTransparency == 0, tag .. "Schild nicht sichtbar") end
-	check(#h.labels == (case.skin == "Normal" and 2 or 3), tag .. "Schildzeilen " .. #h.labels)
+	check(#h.labels == (case.skin == "Normal" and 2 or 3) + (case.isNew and 1 or 0), tag .. "Schildzeilen " .. #h.labels)
 	if h.confetti then check(rawget(h.confetti, "_emitted") == 40 + 20 * (case.order - 4), tag .. "Konfetti") end
 	check((h.confetti ~= nil) == (case.order >= 4), tag .. "Konfetti ab Episch")
 

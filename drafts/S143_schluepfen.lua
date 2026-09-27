@@ -19,6 +19,7 @@ Hatch.play(...) spielt sie per RenderStepped ab.
   local h = Hatch.play(eggModel, brainrotModel, {
       name = "Tung Tung Sahur", rarity = "Episch", rarityOrder = 4, rarityColor = Color3...,
       skin = "Gold", skinName = "Gold", skinColor = Color3..., skinChance = "1 zu 23",
+      isNew = true, isNewSkin = true, -- aus BrainrotIndex:discover() (S144), optional
   }, { cframe = standCF, onDone = function() ... end, sounds = { crack = "rbxassetid://..." } })
 
   eggModel      - z. B. makeEgg(def) aus S142 (Pivot = Unterkante, -Z = zur Kamera). Wird GEKLONT.
@@ -309,7 +310,7 @@ function Hatch.new(eggModel, resultModel, info, opts)
 	anchor.Transparency = 1
 	local gui = Instance.new("BillboardGui")
 	gui.Name = "HatchBanner"
-	gui.Size = UDim2.new(0, 320, 0, 130)
+	gui.Size = UDim2.new(0, 320, 0, 160)
 	gui.StudsOffsetWorldSpace = Vector3.new(0, self.resultHeight + 1.8, 0)
 	gui.AlwaysOnTop = true
 	gui.LightInfluence = 0
@@ -328,6 +329,10 @@ function Hatch.new(eggModel, resultModel, info, opts)
 			skinText ..= "  (" .. info.skinChance .. ")"
 		end
 		table.insert(self.labels, label(gui, skinText, 28, info.skinColor or Color3.fromRGB(255, 220, 80), 3))
+	end
+	if info.isNew or info.isNewSkin then -- aus BrainrotIndex:discover() (S144)
+		table.insert(self.labels, label(gui, info.isNew and "NEU im Index!" or "Neuer Skin im Index!", 22,
+			Color3.fromRGB(120, 255, 150), 4))
 	end
 
 	stage.Parent = opts.parent or workspace
