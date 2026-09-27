@@ -1,7 +1,8 @@
 --[[ S141-ENTWURF: Das Kind mit dem Ballon (Rummel, neben dem Ballonverkaeufer)
 
-UNGEPRUEFT - geschrieben ohne Studio-Zugriff und ohne den WorldBuilder-Quelltext.
-Vor dem Einbau mit drafts/S141_abnahme.lua pruefen.
+UNGEPRUEFT IN STUDIO - geschrieben ohne Studio-Zugriff und ohne den WorldBuilder-Quelltext.
+Trockenlauf (tools/trockenlauf/run.sh): Syntax ok, 34 Teile, Lage 0.00..7.69, 15 Sway-Teile,
+bei WIND als Vector3 und als Winkel. Vor dem Einbau trotzdem mit drafts/S141_abnahme.lua pruefen.
 
 Einbau: als Abschnitt "7. Das Kind mit dem Ballon (S141)" in buildFair(), direkt nach
 Abschnitt 6 (Ballonverkaeufer) und vor dem Aufruf buildFair(). Er braucht aus Abschnitt 6:

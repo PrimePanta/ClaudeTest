@@ -4,3 +4,6 @@ Ablage fuer das Roblox-Projekt "Grow a Brainrot" (die Arbeit selbst passiert in 
 
 - `sessions/` – Uebergaben am Ende jeder Sitzung (S140, ...).
 - `drafts/` – vorbereiteter Luau-Code fuer kommende Sitzungen, UNGEPRUEFT bis zur Abnahme in Studio.
+- `tools/trockenlauf/` – Syntaxpruefung und Trockenlauf eines Entwurfs ohne Studio (laedt Luau bei Bedarf):
+  `tools/trockenlauf/run.sh drafts/<datei>.lua [WIND]`. Liegt daneben eine `<datei>.test.luau`, laeuft sie als Probe mit.
+  Ersetzt NICHT die Abnahme in Studio.
